@@ -8,4 +8,4 @@ $container['couchdb'] = function ($c) {
 	return $couchdb;
 };
 
-
+$container['view'] = new \Slim\Views\PhpRenderer("../templates/");

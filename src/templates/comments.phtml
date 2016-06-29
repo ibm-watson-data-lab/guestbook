@@ -1,0 +1,13 @@
+<h1>Comments</h1>
+
+<?php
+foreach ($comments as $comment):
+?>
+<p><?=$comment['comment']?></p>
+<p><em>by <?=$comment['user']?></p>
+
+<hr />
+
+<?php
+endforeach; //comments
+?>

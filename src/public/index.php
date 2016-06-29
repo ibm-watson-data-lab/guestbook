@@ -1,12 +1,11 @@
 <?php
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
-
 require '../vendor/autoload.php';
 require '../config.php';
 
 spl_autoload_register(function ($classname) {
-    require ("../classes/" . $classname . ".php");
+    require ("../classes/" 
+        . str_replace('\\', DIRECTORY_SEPARATOR, $classname)
+        . ".php");
 });
 
 $app = new \Slim\App(["settings" => $config]);
