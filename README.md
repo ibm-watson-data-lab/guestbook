@@ -12,6 +12,8 @@ Once it's up, there are a few things that you need to start manually from inside
  * HAProxy to put CouchDB onto port 5984 where you were expecting it: go to `/vagrant/couchdb` and run `haproxy -f rel/haproxy.cfg`
  * PHP webserver (could set up nginx instead really): go to `/vagrant-src/public` and run `php -S 0.0.0.0:8080`
 
+You'll need to install the PHP dependencies by running `composer install` in the `\vagrant-src` directory.
+
 You now have a web interface http://192.168.121.8:8080/ and fauxton http://192.168.121.8:5984/_utils/#
 
 CouchDB setup came from here http://couchdb.apache.org/developer-preview/2.0/
