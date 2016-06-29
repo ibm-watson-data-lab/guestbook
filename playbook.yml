@@ -1,0 +1,72 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: apt-get update 
+      raw: sudo apt-get update -qq 
+    - name: Install python 2.7 
+      raw: sudo apt-get install -qq python2.7 
+
+    - name: Fix hostname to allow sudo
+      remote_user: root
+      become: yes
+      lineinfile: dest=/etc/hosts line='127.0.0.1 ubuntu-xenial' owner=root group=root mode=0644
+
+    - name: Install Couchdb dependencies
+      remote_user: root
+      become: yes
+      apt: pkg=build-essential,erlang-base-hipe,erlang-dev,erlang-manpages,erlang-eunit,erlang-nox,libicu-dev,libcurl4-openssl-dev,libmozjs185-dev
+    - name: Install Docs Dependencies
+      remote_user: root
+      become: yes
+      apt: pkg=python-sphinx,texlive-binaries,texlive-latex-base
+
+    - name: Install PHP
+      remote_user: root
+      become: yes
+      apt: pkg=php
+    - name: Install composer
+      remote_user: root
+      become: yes
+      shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin creates=/usr/local/bin/composer
+    - name: Rename composer.phar to composer
+      remote_user: root
+      become: yes
+      shell: mv /usr/local/bin/composer.phar /usr/local/bin/composer creates=/usr/local/bin/composer
+    - name: Make composer executable
+      remote_user: root
+      become: yes
+      file: path=/usr/local/bin/composer mode=a+x state=file
+
+    - name: Install RabbitMQ
+      remote_user: root
+      become: yes
+      apt: pkg=rabbitmq-server
+
+    - name: Install git
+      remote_user: root
+      become: yes
+      apt: pkg=git
+    - name: Create CouchDB Source Dir
+      remote_user: vagrant
+      become: yes
+      file: path=/vagrant/couchdb state=directory 
+    - name: Get CouchDB 2.0 code
+      remote_user: vagrant
+      become: yes
+      git: repo=https://git-wip-us.apache.org/repos/asf/couchdb.git dest=/vagrant/couchdb version=developer-preview-2.0
+    - name: Install Node + npm
+      remote_user: root
+      become: yes
+      apt: pkg=nodejs,npm,nodejs-legacy
+    - name: Install Grunt
+      remote_user: root
+      become: yes
+      npm: name=grunt-cli global=yes
+    - name: Compile CouchDB
+      remote_user: root
+      become: yes
+      raw: cd /vagrant/couchdb && ./configure && make
+    - name: Remind me how to run CouchDB
+      debug: msg="Start couchdb with command dev/run in directory /vagrant/couchdb"
+
