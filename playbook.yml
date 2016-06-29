@@ -15,7 +15,7 @@
     - name: Install Couchdb dependencies
       remote_user: root
       become: yes
-      apt: pkg=build-essential,erlang-base-hipe,erlang-dev,erlang-manpages,erlang-eunit,erlang-nox,libicu-dev,libcurl4-openssl-dev,libmozjs185-dev
+      apt: pkg=build-essential,erlang-base-hipe,erlang-dev,erlang-manpages,erlang-eunit,erlang-nox,libicu-dev,libcurl4-openssl-dev,libmozjs185-dev,haproxy
     - name: Install Docs Dependencies
       remote_user: root
       become: yes
