@@ -29,4 +29,19 @@ class CommentService
 
         return $comments;
     }
+
+    public function add($comment) {
+        // add a timestamp field also
+        $comment['time'] = time();
+        $response = $this->couchdb_handle->request(
+            "POST",
+            "/comments",
+            [
+                "headers" => ["Content-Type" => "application/json"],
+                "body" => json_encode($comment)
+            ]
+        );
+
+        return $response;
+    }
 }
