@@ -9,3 +9,13 @@ $app->get('/', function (Request $request, Response $response) {
     $response = $this->view->render($response, "comments.phtml", ["comments" => $comments]);
     return $response;
 });
+
+$app->map(['GET','POST'], '/add', function (Request $request, Response $response) {
+
+    if($request->isPost()) {
+        // process data
+    }
+
+    $response = $this->view->render($response, "add-comment.phtml");
+    return $response;
+});

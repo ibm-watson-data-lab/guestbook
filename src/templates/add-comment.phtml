@@ -1,0 +1,26 @@
+<?php
+include "header.phtml";
+?>
+<h1>Add Comment</h1>
+
+<form class="pure-form pure-form-aligned">
+    <fieldset>
+        <div class="pure-control-group">
+            <label for="name">Name</label>
+            <input id="name" type="text" placeholder="Jane Doe" size="32">
+        </div>
+
+        <div class="pure-control-group">
+            <label for="comment">Remarks</label>
+            <textarea id="comment" placeholder="Enter something here..." rows="10" cols="65"></textarea>
+        </div>
+
+        <div class="pure-controls">
+            <button type="submit" class="pure-button pure-button-primary">Submit</button>
+        </div>
+    </fieldset>
+</form>
+<?php
+include "footer.phtml";
+?>
+
