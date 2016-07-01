@@ -29,3 +29,22 @@ $app->map(['GET','POST'], '/add', function (Request $request, Response $response
     return $response;
 })->setName('add-comment');
 
+$app->get('/webhooks', function (Request $request, Response $response) {
+    $webhookService = new \Guestbook\WebhookService($this->couchdb['handle']);
+    $webhooks = $webhookService->fetch();
+    $response = $this->view->render($response, "webhooks.phtml", ["webhooks" => $webhooks]);
+    return $response;
+})->setName('webhooks');
+
+$app->post('/webhooks', function (Request $request, Response $response) {
+    // process data
+    $data = $request->getParsedBody();
+    $webhook = [];
+    $webhook['url'] = filter_var($data['url'], FILTER_VALIDATE_URL);
+
+    $webhookService = new \Guestbook\WebhookService($this->couchdb['handle']);
+    $webhookService->add($webhook);
+
+    return $response->withStatus(302)->withHeader('Location', '/webhooks');
+});
+

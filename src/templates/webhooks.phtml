@@ -1,0 +1,33 @@
+<?php
+include "header.phtml";
+?>
+<h1>Manage Webhooks</h1>
+
+<form class="pure-form pure-form-aligned" method="post">
+    <fieldset>
+        <div class="pure-control-group">
+            <label for="url">URL</label>
+            <input name="url" id="url" type="text" placeholder="http://example.com/endpoint" size="32">
+        </div>
+
+        <div class="pure-controls">
+            <input type="submit" class="pure-button pure-button-primary" value="Save Hook">
+        </div>
+    </fieldset>
+</form>
+
+<ul>
+<?php
+foreach ($webhooks as $webhook):
+?>
+<li><?=$webhook['url']?></li>
+
+<?php
+endforeach; //webhooks
+?>
+</ul>
+
+<?php
+include "footer.phtml";
+?>
+
