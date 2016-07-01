@@ -6,9 +6,9 @@ use \Psr\Http\Message\ResponseInterface as Response;
 $app->get('/', function (Request $request, Response $response) {
     $commentService = new \Guestbook\CommentService($this->couchdb['handle']);
     $comments = $commentService->fetch();
-    $response = $this->view->render($response, "comments.phtml", ["comments" => $comments, "router" => $this->router]);
+    $response = $this->view->render($response, "comments.phtml", ["comments" => $comments]);
     return $response;
-});
+})->setName('home');
 
 $app->map(['GET','POST'], '/add', function (Request $request, Response $response) {
 
