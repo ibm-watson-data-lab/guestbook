@@ -42,6 +42,20 @@
       remote_user: root
       become: yes
       apt: pkg=rabbitmq-server
+    - name: Configure RabbitMQ
+      remote_user: root
+      become: yes
+      template: src=rabbitmq.config dest=/etc/rabbitmq/rabbitmq.config
+    - name: Set up Rabbit Management Console
+      remote_user: root
+      become: yes
+      command: rabbitmq-plugins enable rabbitmq_management
+    - name: Restart RabbitMQ
+      remote_user: root
+      become: yes
+      command: service rabbitmq-server restart
+
+      
 
     - name: Install git
       remote_user: root
