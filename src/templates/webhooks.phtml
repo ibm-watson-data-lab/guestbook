@@ -20,7 +20,14 @@ include "header.phtml";
 <?php
 foreach ($webhooks as $webhook):
 ?>
-<li><?=$webhook['url']?></li>
+<li>
+    <?=$webhook['url']?> 
+<form class="pure-form" method="post" action="<?=$router->pathFor('delete-webhook') ?>">
+    <input type="hidden" name="id" value="<?=$webhook['_id']?>" />
+    <input type="hidden" name="rev" value="<?=$webhook['_rev']?>" />
+    <input type="submit" class="pure-button pure-button-primary" value="Remove" />
+</form>
+</li>
 
 <?php
 endforeach; //webhooks

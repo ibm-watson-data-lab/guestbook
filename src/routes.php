@@ -41,10 +41,20 @@ $app->post('/webhooks', function (Request $request, Response $response) {
     $data = $request->getParsedBody();
     $webhook = [];
     $webhook['url'] = filter_var($data['url'], FILTER_VALIDATE_URL);
-
-    $webhookService = new \Guestbook\WebhookService($this->couchdb['handle']);
-    $webhookService->add($webhook);
+    if($webhook(['url'])) {
+        $webhookService = new \Guestbook\WebhookService($this->couchdb['handle']);
+        $webhookService->add($webhook);
+    }
 
     return $response->withStatus(302)->withHeader('Location', '/webhooks');
 });
+
+$app->post('/delete-webhook', function (Request $request, Response $response) {
+    $data = $request->getParsedBody();
+    if($data['id'] && $data['rev']) {
+        $webhookService = new \Guestbook\WebhookService($this->couchdb['handle']);
+        $webhookService->delete($data);
+    }
+    return $response->withStatus(302)->withHeader('Location', '/webhooks');
+})->setName('delete-webhook');
 

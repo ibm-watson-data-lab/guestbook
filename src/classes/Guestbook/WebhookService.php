@@ -41,4 +41,16 @@ class WebhookService
 
         return $response;
     }
+
+    public function delete($webhook) {
+        $response = $this->couchdb_handle->request(
+            "DELETE",
+            "/webhooks/" . $webhook['id'],
+            [
+                "query" => ["rev" => $webhook['rev']],
+            ]
+        );
+
+        return $response;
+    }
 }
