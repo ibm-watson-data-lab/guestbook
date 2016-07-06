@@ -41,7 +41,7 @@ $app->post('/webhooks', function (Request $request, Response $response) {
     $data = $request->getParsedBody();
     $webhook = [];
     $webhook['url'] = filter_var($data['url'], FILTER_VALIDATE_URL);
-    if($webhook(['url'])) {
+    if($webhook['url']) {
         $webhookService = new \Guestbook\WebhookService($this->couchdb['handle']);
         $webhookService->add($webhook);
     }
