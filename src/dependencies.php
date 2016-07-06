@@ -34,5 +34,5 @@ $container['rabbitmq'] = function ($c) {
 		); 
         return $connection;
     }
-    return false;
+    return null;
 };

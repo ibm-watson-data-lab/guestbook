@@ -45,7 +45,7 @@ class CommentService
             ]
         );
 
-        if($response) {
+        if($response && $this->rabbitmq_handle) {
             // also write it to the queue
             $channel = $this->rabbitmq_handle->channel();
 			$msg = new \PhpAmqpLib\Message\AMQPMessage(
