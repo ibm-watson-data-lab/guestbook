@@ -24,7 +24,7 @@
     - name: Install PHP
       remote_user: root
       become: yes
-      apt: pkg=php
+      apt: pkg=php,php-bcmath,php-mbstring
     - name: Install composer
       remote_user: root
       become: yes
