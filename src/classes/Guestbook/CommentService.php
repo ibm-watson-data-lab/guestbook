@@ -5,9 +5,12 @@ namespace Guestbook;
 class CommentService
 {
     protected $couchdb_handle;
+    // Rabbit is optional
+    protected $rabbitmq_handle = false;
 
-    public function __construct(\GuzzleHttp\Client $couchdb_handle) {
+    public function __construct(\GuzzleHttp\Client $couchdb_handle, \PhpAmqpLib\Connection\AMQPConnection $rabbitmq_handle = null) {
         $this->couchdb_handle = $couchdb_handle;
+        $this->rabbitmq_handle = $rabbitmq_handle;
     }
 
     public function fetch() {
@@ -42,6 +45,15 @@ class CommentService
             ]
         );
 
+        if($response) {
+            // also write it to the queue
+            $channel = $this->rabbitmq_handle->channel();
+			$msg = new \PhpAmqpLib\Message\AMQPMessage(
+				$comment,
+				["delivery_mode" => 2]
+			);
+			$channel->basic_publish($msg, '', 'comments');
+        }
         return $response;
     }
 }

@@ -19,7 +19,7 @@ $app->map(['GET','POST'], '/add', function (Request $request, Response $response
         $comment['name'] = filter_var($data['name'], FILTER_SANITIZE_STRING);
         $comment['comment'] = filter_var($data['comment'], FILTER_SANITIZE_STRING);
 
-        $commentService = new \Guestbook\CommentService($this->couchdb['handle']);
+        $commentService = new \Guestbook\CommentService($this->couchdb['handle'], $this->rabbitmq);
         $commentService->add($comment);
 
         return $response->withStatus(302)->withHeader('Location', '/');
