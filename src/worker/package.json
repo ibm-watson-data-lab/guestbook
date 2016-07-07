@@ -1,0 +1,6 @@
+{
+    "dependencies": {
+        "amqplib":  "~0.4",
+        "nano":     "~6.2"
+    }
+}
