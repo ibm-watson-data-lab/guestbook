@@ -49,8 +49,8 @@ class CommentService
             // also write it to the queue
             $channel = $this->rabbitmq_handle->channel();
 			$msg = new \PhpAmqpLib\Message\AMQPMessage(
-				$comment,
-				["delivery_mode" => 2]
+				json_encode($comment),
+				["delivery_mode" => 2] // store this message persistently, as well as just the queue
 			);
 			$channel->basic_publish($msg, '', 'comments');
         }
