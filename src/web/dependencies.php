@@ -27,10 +27,10 @@ $container['rabbitmq'] = function ($c) {
         $channel = $connection->channel();
 		$channel->queue_declare(
             'comments',
-            false,
-            true,
-            false,
-            false
+            false, // passive
+            true, // durable
+            false, // exclusive
+            false // autodelete
 		); 
         return $connection;
     }
