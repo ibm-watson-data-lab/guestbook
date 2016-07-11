@@ -1,6 +1,7 @@
 {
     "dependencies": {
         "amqplib":  "~0.4",
-        "nano":     "~6.2"
+        "nano":     "~6.2",
+        "async":    "~1.5"
     }
 }
