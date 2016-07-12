@@ -1,6 +1,7 @@
-var amqp = require('amqplib/callback_api');
-var nano = require('nano')('http://localhost:5984');
-var async = require('async');
+var amqp    = require('amqplib/callback_api');
+var nano    = require('nano')('http://localhost:5984');
+var async   = require('async');
+var request = require('request');
 
 async.waterfall([
     function(callback) {
@@ -24,12 +25,23 @@ async.waterfall([
                 ch.assertQueue(q, {durable: true});
                 console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
                 ch.consume(q, function(msg) {
-                console.log(" [x] Received %s", msg.content.toString());
-                }, {noAck: true});
+                    hooks.forEach(function (url) {
+                        console.log("Request to " + url);
+                        request({
+                            url: url,
+                            method: "post",
+                            json: msg.content.toString()
+                        }, function (error, response, body) {
+                        });
+                    });
+                    ch.ack(msg);
+
+                    console.log(" [x] Complete: %s", msg.content.toString());
+                });
             });
         });
     }
-], function (err, hooks) {
+], function (err, result) {
 });
 
 
