@@ -33,6 +33,9 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder '.', '/vagrant', type: "nfs"
   config.vm.synced_folder "src", "/vagrant-src", type: "nfs"
 
+  config.vm.provider "virtualbox" do |vb|
+      vb.name = "retro-guestbook-sample-app"
+  end
   #
   # Run Ansible from the Vagrant Host
   #
