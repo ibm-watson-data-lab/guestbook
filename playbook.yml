@@ -80,7 +80,7 @@
     - name: Compile CouchDB
       remote_user: root
       become: yes
-      raw: cd /vagrant/couchdb && ./configure && make
+      raw: cd /vagrant/couchdb && ./configure --disable-docs && make
     - name: Remind me how to run CouchDB
       debug: msg="Start couchdb with command dev/run in directory /vagrant/couchdb"
 
