@@ -19,6 +19,7 @@ include "header.phtml";
 <ul>
 <?php
 foreach ($webhooks as $webhook):
+    if(isset($webhook['url'])):
 ?>
 <li>
     <?=$webhook['url']?> 
@@ -30,6 +31,7 @@ foreach ($webhooks as $webhook):
 </li>
 
 <?php
+    endif; //webhook url
 endforeach; //webhooks
 ?>
 </ul>
