@@ -7,9 +7,9 @@ async.waterfall([
     function(callback) {
 		var hooks = [];
 		var webhooks_db = nano.use('webhooks');
-		webhooks_db.view('main', 'all', function (err, hook) {
+		webhooks_db.list({ include_docs: true }, function (err, hook) {
 			hook.rows.forEach(function (row) {
-				hooks.push(row.value.url);
+				hooks.push(row.doc.url);
 			});
             callback(null, hooks);
 		});
