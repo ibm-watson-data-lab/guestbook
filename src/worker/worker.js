@@ -25,11 +25,10 @@ webhooks_db.list({ include_docs: true }, function (err, hook) {
                         method: "post",
                         json: msg.content.toString()
                     }, function (error, response, body) {
+                        ch.ack(msg);
+                        console.log(" [x] Complete: %s", msg.content.toString());
                     });
                 });
-                ch.ack(msg);
-
-                console.log(" [x] Complete: %s", msg.content.toString());
             });
         });
     });
