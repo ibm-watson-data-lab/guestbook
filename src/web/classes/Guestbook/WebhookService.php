@@ -34,8 +34,7 @@ class WebhookService
             "POST",
             "/webhooks",
             [
-                "headers" => ["Content-Type" => "application/json"],
-                "body" => json_encode($webhook)
+                "json" => $webhook
             ]
         );
 
