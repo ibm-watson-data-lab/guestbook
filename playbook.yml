@@ -53,9 +53,7 @@
     - name: Restart RabbitMQ
       remote_user: root
       become: yes
-      command: service rabbitmq-server restart
-
-      
+      service: name=rabbitmq-server state=restarted
 
     - name: Install git
       remote_user: root
@@ -80,7 +78,36 @@
     - name: Compile CouchDB
       remote_user: root
       become: yes
-      raw: cd /vagrant/couchdb && ./configure --disable-docs && make
-    - name: Remind me how to run CouchDB
-      debug: msg="Start couchdb with command dev/run in directory /vagrant/couchdb"
+      shell: ./configure --disable-docs && make
+      args:
+        chdir: /vagrant/couchdb
+        creates: bin/couchjs
+
+
+
+    - name: Install Python and other requestbin requirements
+      remote_user: root
+      become: yes
+      apt: package=python3,python-pip,libevent-dev,gunicorn
+    - name: Clone Requestbin
+      remote_user: vagrant
+      become: yes
+      git: repo=https://github.com/Runscope/requestbin.git dest=/vagrant/requestbin
+    - name: Install Requestbin dependencies
+      pip: requirements=/vagrant/requestbin/requirements.txt
+    - name: Copy requestbin systemd file over
+      remote_user: root
+      become: yes
+      copy: src=systemd/requestbin.service dest=/etc/systemd/system/requestbin.service
+    - name: Enable requestbin service
+      remote_user: root
+      become: yes
+      raw: systemctl enable requestbin.service
+    - name: Start requestbin service
+      remote_user: root
+      become: yes
+      raw: systemctl start requestbin.service
+
+
+
 
