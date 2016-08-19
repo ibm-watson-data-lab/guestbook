@@ -12,14 +12,10 @@
       become: yes
       lineinfile: dest=/etc/hosts line='127.0.0.1 ubuntu-xenial' owner=root group=root mode=0644
 
-    - name: Install Couchdb dependencies
+    - name: Install git
       remote_user: root
       become: yes
-      apt: pkg=build-essential,erlang-base-hipe,erlang-dev,erlang-manpages,erlang-eunit,erlang-nox,libicu-dev,libcurl4-openssl-dev,libmozjs185-dev,haproxy
-    - name: Install Docs Dependencies
-      remote_user: root
-      become: yes
-      apt: pkg=python-sphinx,texlive-binaries,texlive-latex-base
+      apt: pkg=git
 
     - name: Install PHP
       remote_user: root
@@ -37,6 +33,23 @@
       remote_user: root
       become: yes
       file: path=/usr/local/bin/composer mode=a+x state=file
+    - name: Composer install command
+      remote_user: vagrant
+      become: yes
+      shell: composer install
+      args:
+        chdir: /vagrant/src/web/
+
+    - name: Install Node + npm
+      remote_user: root
+      become: yes
+      apt: pkg=nodejs,npm,nodejs-legacy
+    - name: Install node worker dependencies
+      remote_user: root
+      become: yes
+      shell: npm install
+      args:
+          chdir: /vagrant/src/worker/
 
     - name: Install RabbitMQ
       remote_user: root
@@ -55,10 +68,10 @@
       become: yes
       service: name=rabbitmq-server state=restarted
 
-    - name: Install git
+    - name: Install Couchdb dependencies
       remote_user: root
       become: yes
-      apt: pkg=git
+      apt: pkg=build-essential,erlang-base-hipe,erlang-dev,erlang-manpages,erlang-eunit,erlang-nox,libicu-dev,libcurl4-openssl-dev,libmozjs185-dev,haproxy
     - name: Create CouchDB Source Dir
       remote_user: vagrant
       become: yes
@@ -67,10 +80,6 @@
       remote_user: vagrant
       become: yes
       git: repo=https://git-wip-us.apache.org/repos/asf/couchdb.git dest=/vagrant/couchdb version=developer-preview-2.0
-    - name: Install Node + npm
-      remote_user: root
-      become: yes
-      apt: pkg=nodejs,npm,nodejs-legacy
     - name: Install Grunt
       remote_user: root
       become: yes
@@ -82,8 +91,6 @@
       args:
         chdir: /vagrant/couchdb
         creates: bin/couchjs
-
-
 
     - name: Install Python and other requestbin requirements
       remote_user: root
@@ -108,6 +115,62 @@
       become: yes
       raw: systemctl start requestbin.service
 
+    - name: Copy couchdb systemd file over
+      remote_user: root
+      become: yes
+      copy: src=systemd/couchdb.service dest=/etc/systemd/system/couchdb.service
+    - name: Copy couchdb-haproxy systemd file over
+      remote_user: root
+      become: yes
+      copy: src=systemd/couchdb-haproxy.service dest=/etc/systemd/system/couchdb-haproxy.service
+    - name: Copy guestbook-web systemd file over
+      remote_user: root
+      become: yes
+      copy: src=systemd/guestbook-web.service dest=/etc/systemd/system/guestbook-web.service
+    - name: Copy guestbook-worker systemd file over
+      remote_user: root
+      become: yes
+      copy: src=systemd/guestbook-worker.service dest=/etc/systemd/system/guestbook-worker.service
+
+    - name: Enable guestbook-web service
+      remote_user: root
+      become: yes
+      raw: systemctl enable guestbook-web.service
+    - name: Enable couchdb service
+      remote_user: root
+      become: yes
+      raw: systemctl enable couchdb.service
+    - name: Enable couchdb-haproxy service
+      remote_user: root
+      become: yes
+      raw: systemctl enable couchdb-haproxy.service
+    - name: Enable guestbook-worker service
+      remote_user: root
+      become: yes
+      raw: systemctl enable guestbook-worker.service
+
+    - name: Reload Systemd config files
+      remote_user: root
+      become: yes
+      raw: systemctl daemon-reload
+
+
+    - name: Start guestbook-web service
+      remote_user: root
+      become: yes
+      raw: systemctl start guestbook-web.service
+    - name: Start couchdb service
+      remote_user: root
+      become: yes
+      raw: systemctl start couchdb.service
+    - name: Start couchdb-haproxy service
+      remote_user: root
+      become: yes
+      raw: systemctl start couchdb-haproxy.service
+    - name: Start guestbook-worker service
+      remote_user: root
+      become: yes
+      raw: systemctl start guestbook-worker.service
 
 
 
