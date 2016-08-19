@@ -1,0 +1,12 @@
+[Unit]
+Description=Guestbook Worker
+
+[Service]
+ExecStart=/usr/bin/node worker.js
+User=ubuntu
+WorkingDirectory=/vagrant/src/worker
+Restart=always
+
+[Install]
+
+

@@ -1,0 +1,12 @@
+[Unit]
+Description=Guestbook Web Frontend
+
+[Service]
+ExecStart=/usr/bin/php -S 0.0.0.0:8080
+User=ubuntu
+WorkingDirectory=/vagrant/src/web/public/
+Restart=always
+
+[Install]
+
+

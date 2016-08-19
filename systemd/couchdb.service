@@ -3,7 +3,8 @@ Description=CouchDB 2.0
 
 [Service]
 TimeoutStartSec=10
-ExecStart=/vagrant/couchdb/dev/run
+ExecStart=/usr/bin/python dev/run
+WorkingDirectory=/vagrant/couchdb/
 User=ubuntu
 Restart=always
 
