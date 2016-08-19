@@ -9,7 +9,7 @@ class CommentService
     protected $rabbitmq_handle = false;
 
     public function __construct(\GuzzleHttp\Client $couchdb_handle, 
-        \PhpAmqpLib\Connection\AMQPStreamConnection $rabbitmq_handle = null)i
+        \PhpAmqpLib\Connection\AMQPStreamConnection $rabbitmq_handle = null)
     {
         $this->couchdb_handle = $couchdb_handle;
         $this->rabbitmq_handle = $rabbitmq_handle;
