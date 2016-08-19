@@ -1,0 +1,10 @@
+[Unit]
+Description=Haproxy setup for CouchDB 2.0
+
+[Service]
+ExecStart=/usr/sbin/haproxy -f /vagrant/couchdb/rel/haproxy.cfg
+User=ubuntu
+Restart=always
+After=couchdb.service
+
+[Install]

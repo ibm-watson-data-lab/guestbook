@@ -1,2 +1,4 @@
 .vagrant/
 playbook.retry
+couchdb/
+requestbin/

@@ -1,0 +1,11 @@
+[Unit]
+Description=Local Requestbin
+
+[Service]
+ExecStart=/usr/bin/gunicorn --bind 0.0.0.0:8001 requestbin:app
+User=ubuntu
+WorkingDirectory=/vagrant/requestbin
+Restart=always
+
+[Install]
+

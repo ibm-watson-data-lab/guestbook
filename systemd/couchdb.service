@@ -1,0 +1,10 @@
+[Unit]
+Description=CouchDB 2.0
+
+[Service]
+TimeoutStartSec=10
+ExecStart=/vagrant/couchdb/dev/run
+User=ubuntu
+Restart=always
+
+[Install]
