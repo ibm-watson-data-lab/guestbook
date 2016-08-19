@@ -8,12 +8,15 @@ class CommentService
     // Rabbit is optional
     protected $rabbitmq_handle = false;
 
-    public function __construct(\GuzzleHttp\Client $couchdb_handle, \PhpAmqpLib\Connection\AMQPConnection $rabbitmq_handle = null) {
+    public function __construct(\GuzzleHttp\Client $couchdb_handle, 
+        \PhpAmqpLib\Connection\AMQPStreamConnection $rabbitmq_handle = null)i
+    {
         $this->couchdb_handle = $couchdb_handle;
         $this->rabbitmq_handle = $rabbitmq_handle;
     }
 
-    public function fetch() {
+    public function fetch()
+    {
         $comments = [];
 
         $response = $this->couchdb_handle->request(
@@ -33,7 +36,8 @@ class CommentService
         return $comments;
     }
 
-    public function add($comment) {
+    public function add($comment)
+    {
         // add a timestamp field also
         $comment['time'] = time();
         $response = $this->couchdb_handle->request(
