@@ -15,20 +15,22 @@ webhooks_db.list({ include_docs: true }, function (err, hook) {
         conn.createChannel(function(err, ch) {
             var q = 'comments';
 
-            ch.assertQueue(q, {durable: true});
+            ch.assertQueue(q, {durable: true, noAck: false});
             console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
             ch.consume(q, function(msg) {
                 hooks.forEach(function (url) {
-                    console.log("Request to " + url);
-                    request({
-                        url: url,
-                        method: "post",
-                        json: msg.content.toString()
-                    }, function (error, response, body) {
-                        ch.ack(msg);
-                        console.log(" [x] Complete: %s", msg.content.toString());
-                    });
+                    if(url) {
+                        console.log("Request to " + url);
+                        request({
+                            url: url,
+                            method: "post",
+                            json: msg.content.toString()
+                        }, function (error, response, body) {
+                            console.log(" [x] Complete: %s", msg.content.toString());
+                        });
+                    }
                 });
+                ch.ack(msg);
             });
         });
     });
