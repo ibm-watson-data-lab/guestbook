@@ -95,7 +95,7 @@
     - name: Install Python and other requestbin requirements
       remote_user: root
       become: yes
-      apt: package=python3,python-pip,libevent-dev,gunicorn
+      apt: package=python3,python-pip,libevent-dev,gunicorn,redis-server,redis-tools
     - name: Clone Requestbin
       remote_user: vagrant
       become: yes
@@ -110,10 +110,6 @@
       remote_user: root
       become: yes
       raw: systemctl enable requestbin.service
-    - name: Start requestbin service
-      remote_user: root
-      become: yes
-      raw: systemctl start requestbin.service
 
     - name: Copy couchdb systemd file over
       remote_user: root
@@ -153,24 +149,5 @@
       remote_user: root
       become: yes
       raw: systemctl daemon-reload
-
-
-    - name: Start guestbook-web service
-      remote_user: root
-      become: yes
-      raw: systemctl start guestbook-web.service
-    - name: Start couchdb service
-      remote_user: root
-      become: yes
-      raw: systemctl start couchdb.service
-    - name: Start couchdb-haproxy service
-      remote_user: root
-      become: yes
-      raw: systemctl start couchdb-haproxy.service
-    - name: Start guestbook-worker service
-      remote_user: root
-      become: yes
-      raw: systemctl start guestbook-worker.service
-
 
 
