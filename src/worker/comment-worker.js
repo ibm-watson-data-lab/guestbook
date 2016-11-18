@@ -1,5 +1,4 @@
 var amqp    = require('amqplib/callback_api');
-var request = require('request');
 
 var hooks = [];
 amqp.connect('amqp://localhost', function(err, conn) {
@@ -17,7 +16,6 @@ amqp.connect('amqp://localhost', function(err, conn) {
             ch.assertQueue(q2, {durable: true, noAck: false});
             data.webhooks.forEach(function (url) {
                 single_msg = {comment: comment, url: url};
-                console.log(single_msg);
                 ch.sendToQueue(q2, new Buffer(JSON.stringify(single_msg)), {persistent: true});
             });
             ch.ack(msg);
