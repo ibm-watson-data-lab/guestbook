@@ -1,37 +1,26 @@
 var amqp    = require('amqplib/callback_api');
-var nano    = require('nano')('http://localhost:5984');
-var async   = require('async');
 var request = require('request');
 
 var hooks = [];
-var webhooks_db = nano.use('webhooks');
-webhooks_db.list({ include_docs: true }, function (err, hook) {
+amqp.connect('amqp://localhost', function(err, conn) {
+    conn.createChannel(function(err, ch) {
+        var q = 'comments';
 
-    hook.rows.forEach(function (row) {
-		hooks.push(row.doc.url);
-	});
+        ch.assertQueue(q, {durable: true, noAck: false});
+        console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
+        ch.consume(q, function(msg) {
+            console.log(msg.content.toString());
+            var data = JSON.parse(msg.content);
+            var comment = data.comment;
 
-    amqp.connect('amqp://localhost', function(err, conn) {
-        conn.createChannel(function(err, ch) {
-            var q = 'comments';
-
-            ch.assertQueue(q, {durable: true, noAck: false});
-            console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
-            ch.consume(q, function(msg) {
-                hooks.forEach(function (url) {
-                    if(url) {
-                        console.log("Request to " + url);
-                        request({
-                            url: url,
-                            method: "post",
-                            json: msg.content.toString()
-                        }, function (error, response, body) {
-                            console.log(" [x] Complete: %s", msg.content.toString());
-                        });
-                    }
-                });
-                ch.ack(msg);
+            var q2 = 'notifications';
+            ch.assertQueue(q2, {durable: true, noAck: false});
+            data.webhooks.forEach(function (url) {
+                single_msg = {comment: comment, url: url};
+                console.log(single_msg);
+                ch.sendToQueue(q2, new Buffer(JSON.stringify(single_msg)), {persistent: true});
             });
+            ch.ack(msg);
         });
     });
 });
