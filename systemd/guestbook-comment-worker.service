@@ -1,8 +1,8 @@
 [Unit]
-Description=Guestbook Worker
+Description=Guestbook Comment Worker
 
 [Service]
-ExecStart=/usr/bin/node worker.js
+ExecStart=/usr/bin/node comment-worker.js
 User=ubuntu
 WorkingDirectory=/vagrant/src/worker
 Restart=always

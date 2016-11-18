@@ -1,0 +1,12 @@
+[Unit]
+Description=Guestbook Notifications Worker
+
+[Service]
+ExecStart=/usr/bin/node notification-worker.js
+User=ubuntu
+WorkingDirectory=/vagrant/src/worker
+Restart=always
+
+[Install]
+
+

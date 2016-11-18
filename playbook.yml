@@ -123,10 +123,14 @@
       remote_user: root
       become: yes
       copy: src=systemd/guestbook-web.service dest=/etc/systemd/system/guestbook-web.service
-    - name: Copy guestbook-worker systemd file over
+    - name: Copy guestbook-comment-worker systemd file over
       remote_user: root
       become: yes
-      copy: src=systemd/guestbook-worker.service dest=/etc/systemd/system/guestbook-worker.service
+      copy: src=systemd/guestbook-comment-worker.service dest=/etc/systemd/system/guestbook-comment-worker.service
+    - name: Copy guestbook-notification-worker systemd file over
+      remote_user: root
+      become: yes
+      copy: src=systemd/guestbook-notification-worker.service dest=/etc/systemd/system/guestbook-notification-worker.service
 
     - name: Enable guestbook-web service
       remote_user: root
@@ -140,10 +144,14 @@
       remote_user: root
       become: yes
       raw: systemctl enable couchdb-haproxy.service
-    - name: Enable guestbook-worker service
+    - name: Enable guestbook-comment-worker service
       remote_user: root
       become: yes
-      raw: systemctl enable guestbook-worker.service
+      raw: systemctl enable guestbook-comment-worker.service
+    - name: Enable guestbook-notification-worker service
+      remote_user: root
+      become: yes
+      raw: systemctl enable guestbook-notification-worker.service
 
     - name: Reload Systemd config files
       remote_user: root
