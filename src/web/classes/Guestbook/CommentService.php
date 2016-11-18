@@ -49,43 +49,26 @@ class CommentService
             ]
         );
 
+        // get the list of webhooks to notify
+        $hooks_response = $this->couchdb_handle->request(
+            "GET",
+            "/webhooks/_all_docs",
+            ['query' => ['include_docs' => 'true']]
+        );
+        if($hooks_response->getStatusCode() == 200) {
+            $webhooks = json_decode($hooks_response->getBody(), true);
+        } else {
+            $webhooks = [];
+        }
+
         if($response && $this->rabbitmq_handle) {
             // also write it to the queue
             $channel = $this->rabbitmq_handle->channel();
 			$msg = new \PhpAmqpLib\Message\AMQPMessage(
-				json_encode($comment),
+				json_encode(["comment" => $comment, "webhooks" => $webhooks]),
 				["delivery_mode" => 2] // store this message persistently, as well as just the queue
 			);
 			$channel->basic_publish($msg, '', 'comments');
-        } else {
-            // send webhooks now (PHP streams for very simple examples)
-            $options = [
-                "http" => [
-                    "method" => "POST",
-                    "header" => "Content-Type: application/json",
-                    "content" => json_encode($comment)
-                ]
-            ];
-
-            // now get the URLs and send the webhooks
-            $hooks_response = $this->couchdb_handle->request(
-                "GET",
-                "/webhooks/_all_docs",
-                ['query' => ['include_docs' => 'true']]
-            );
-            if($hooks_response->getStatusCode() == 200) {
-                if(false !== $data = json_decode($hooks_response->getBody(), true)) {
-                    foreach($data['rows'] as $hook) {
-                        if(isset($hook['doc']['url'])) {
-                            $response = file_get_contents(
-                                $hook['doc']['url'],
-                                null,
-                                stream_context_create($options)
-                            );
-                        }
-                    }
-                }
-            }
         }
         return $response;
     }
