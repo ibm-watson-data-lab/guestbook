@@ -55,10 +55,15 @@ class CommentService
             "/webhooks/_all_docs",
             ['query' => ['include_docs' => 'true']]
         );
+        $webhooks = [];
         if($hooks_response->getStatusCode() == 200) {
-            $webhooks = json_decode($hooks_response->getBody(), true);
-        } else {
-            $webhooks = [];
+            if($data = json_decode($hooks_response->getBody(), true)) {
+                foreach ($data['rows'] as $doc) {
+                    if(isset($doc['doc']['url'])) {
+                        $webhooks [] = ["url" => $doc['doc']['url']];
+                    }
+                }
+            }
         }
 
         if($response && $this->rabbitmq_handle) {
