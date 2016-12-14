@@ -1,0 +1,6 @@
+---
+applications:
+    - name: guestbook-web
+      memory: 512M
+      services:
+          - guestbook-db
