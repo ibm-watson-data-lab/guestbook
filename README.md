@@ -2,7 +2,13 @@
 
 Simple application to accept and store visitors comments.  Uses CouchDB 2.0 for storage and also offers webhooks for realtime updates of new comments via RabbitMQ.
 
-## Installation and Setup
+## Deploying to Cloud
+
+Deploy the guestbook from `src/web` directory - `cf push`.
+
+It relies on a CloudantNoSQLDB called "guestbook-db" and a RabbitMQ service called "guestbook-messages"; these services need to be created before you deploy.  In the CloudantNoSQLDB the databases `comments` and `webhooks` also need to be created in advance.
+
+## Instructions for Local Installation and Setup
 
 It's vagrant and ansible.  Type `vagrant up` and your machine will be on `192.168.121.8`.
 
