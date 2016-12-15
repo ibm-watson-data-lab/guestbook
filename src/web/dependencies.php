@@ -19,9 +19,13 @@ $container['rabbitmq'] = function ($c) {
     if($c['settings']['rabbitmq'] && $c['settings']['rabbitmq']['host']) {
         // assume we are expecting to set up a connetion here
         if(isset($c['settings']['rabbitmq']['ssl']) && $c['settings']['rabbitmq']['ssl']) {
+            // handle cert file: we need to grab the certificate string we got from
+            // VCAP and actually write it to a file as the PHP SSL stream context
+            // expects to find it
+            file_put_contents("../certfile", $c['settings']['rabbitmq']['cert']);
+
 			$ssl_options = array(
-				'capath' => '/etc/ssl/certs',
-				'cafile' => $c['settings']['rabbitmq']['cert'], // my downloaded cert file
+				'cafile' => "../certfile",
 				'verify_peer' => true,
 			);
             $connection = new \PhpAmqpLib\Connection\AMQPSSLConnection(

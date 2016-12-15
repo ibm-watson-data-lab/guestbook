@@ -4,3 +4,4 @@ applications:
       memory: 512M
       services:
           - guestbook-db
+          - guestbook-messages
