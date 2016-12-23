@@ -1,7 +1,21 @@
 var amqp    = require('amqplib/callback_api');
+var atob    = require('atob');
+var cfenv   = require('cfenv');
+
+if (process.env.VCAP_SERVICES) {
+    var appEnv = cfenv.getAppEnv()
+    rabbitmq_url = appEnv.getService('guestbook-messages').credentials.uri;
+    cert_string = atob(appEnv.getService('guestbook-messages').credentials.ca_certificate_base64);
+    ca = new Buffer(cert_string);
+    opts = {ca: [ca]};
+} else {
+	rabbitmq_url = 'amqp://localhost';
+    opts = {};
+}
+console.log(rabbitmq_url);
 
 var hooks = [];
-amqp.connect('amqp://localhost', function(err, conn) {
+amqp.connect(rabbitmq_url, opts, function(err, conn) {
     conn.createChannel(function(err, ch) {
         var q = 'comments';
 
@@ -22,5 +36,4 @@ amqp.connect('amqp://localhost', function(err, conn) {
         });
     });
 });
-
 

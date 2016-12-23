@@ -1,0 +1,8 @@
+---
+applications:
+    - name: commentWorker
+      command: node comment-worker.js
+      no-route: true
+      memory: 128M
+      services:
+        - guestbook-messages
