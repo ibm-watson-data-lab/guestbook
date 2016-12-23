@@ -12,7 +12,6 @@ if (process.env.VCAP_SERVICES) {
 	rabbitmq_url = 'amqp://localhost';
     opts = {};
 }
-console.log(rabbitmq_url);
 
 var hooks = [];
 amqp.connect(rabbitmq_url, opts, function(err, conn) {

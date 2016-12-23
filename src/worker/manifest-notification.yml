@@ -1,0 +1,10 @@
+---
+applications:
+    - name: notificationWorker
+      command: node notification-worker.js
+      no-route: true
+      memory: 128M
+      instances: 4
+      services:
+        - guestbook-messages
+
