@@ -8,6 +8,8 @@ Deploy the guestbook from `src/web` directory - `cf push`.
 
 It relies on a CloudantNoSQLDB called "guestbook-db" and a RabbitMQ service called "guestbook-messages"; these services need to be created before you deploy.  In the CloudantNoSQLDB the databases `comments` and `webhooks` also need to be created in advance.
 
+The two workers are also deployable, in the `src/worker` directory, use `cf push commentWorker` and `cf push notificationWorker` respectively (each has their own specific manifest file).
+
 ## Instructions for Local Installation and Setup
 
 It's vagrant and ansible.  Type `vagrant up` and your machine will be on `192.168.121.8`.
