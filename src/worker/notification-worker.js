@@ -18,7 +18,7 @@ amqp.connect(rabbitmq_url, opts, function(err, conn) {
     conn.createChannel(function(err, ch) {
         var q = 'notifications';
 
-        ch.assertQueue(q, {durable: true, noAck: false});
+        ch.assertQueue(q, {durable: true, noAck: false, arguments: {"x-max-length": 10000}});
         console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
         ch.consume(q, function(msg) {
 			data = JSON.parse(msg.content);
