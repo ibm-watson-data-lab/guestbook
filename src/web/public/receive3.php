@@ -8,7 +8,7 @@ if($json = json_decode(file_get_contents("php://input"), true)) {
     $data = $_POST;
 }
 
-// now write this to a database (CouchDB)
+echo "Saving data ...\n";
 $url = "http://localhost:5984/incoming";
 
 $meta = ["received" => time(),

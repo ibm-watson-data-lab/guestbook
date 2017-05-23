@@ -30,8 +30,8 @@ CouchDB setup came from here http://couchdb.apache.org/developer-preview/2.0/
 
 ## To Show Incoming Webhooks with NGrok
 
-There's a file called `receive.php` in the webroot of the guestbook frontend, so curl to http://192.168.121.8:8080/receive.php to see an empty array is output.  If you send form data, it dumps `$_POST`, if you send JSON then it decodes that first.
+There's a file called `receive2.php` in the webroot of the guestbook frontend, so curl to http://192.168.121.8:8080/receive.php to see an empty array is output.  If you send form data, it dumps `$_POST`, if you send JSON then it decodes that first.
 
-SSH into vagrant and go to `/vagrant`.  There you will find a script that runs the local binary of ngrok with an associated config file that makes the dashboard available on the host machine
+SSH into vagrant and go to `/vagrant`.  There you will find a script that runs the local binary of ngrok with an associated config file that makes the dashboard available on the host machine `run-ngrok-locally.sh`.  Now hit that (optionally from github).
 
-
+Use `receive3.php` to write the incoming data to CouchDB as a poor-man's queueing option.
