@@ -26,7 +26,7 @@ amqp.connect(rabbitmq_url, opts, function(err, conn) {
             var comment = data.comment;
 
             var q2 = 'notifications';
-            ch.assertQueue(q2, {durable: true, noAck: false});
+            ch.assertQueue(q2, {durable: true, noAck: false, arguments: {"x-max-length": 10000}});
             data.webhooks.forEach(function (url) {
                 single_msg = {comment: comment, url: url};
                 ch.sendToQueue(q2, new Buffer(JSON.stringify(single_msg)), {persistent: true});
