@@ -68,29 +68,10 @@
       become: yes
       service: name=rabbitmq-server state=restarted
 
-    - name: Install Couchdb dependencies
+    - name: Install CouchDB via snapd (fails first time, just provision again)
       remote_user: root
       become: yes
-      apt: pkg=build-essential,erlang-base-hipe,erlang-dev,erlang-manpages,erlang-eunit,erlang-nox,libicu-dev,libcurl4-openssl-dev,libmozjs185-dev,haproxy
-    - name: Create CouchDB Source Dir
-      remote_user: vagrant
-      become: yes
-      file: path=/vagrant/couchdb state=directory 
-    - name: Get CouchDB 2.0 code
-      remote_user: vagrant
-      become: yes
-      git: repo=https://git-wip-us.apache.org/repos/asf/couchdb.git dest=/vagrant/couchdb version=developer-preview-2.0
-    - name: Install Grunt
-      remote_user: root
-      become: yes
-      npm: name=grunt-cli global=yes
-    - name: Compile CouchDB
-      remote_user: root
-      become: yes
-      shell: ./configure --disable-docs && make
-      args:
-        chdir: /vagrant/couchdb
-        creates: bin/couchjs
+      raw: snap install couchdb
 
     - name: Install Python and other requestbin requirements
       remote_user: root
