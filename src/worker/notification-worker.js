@@ -31,7 +31,9 @@ amqp.connect(rabbitmq_url, opts, function(err, conn) {
 				if(!error) {
 					console.log(" [x] Complete: %s", msg.content.toString());
 					ch.ack(msg);
-				}
+				} else {
+                    console.log(error);
+                }
 
 			});
 		});
