@@ -14,5 +14,5 @@ function main(array $params) : array
 
     $meta = ["received" => time(), "status" => "new"]; 
     $db->create(["data" => $data, "meta" => $meta]);
-    return ["body" => "Exxxxxcellent"];
+    return ["body" => "OK"];
 }

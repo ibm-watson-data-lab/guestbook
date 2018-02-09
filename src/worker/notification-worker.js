@@ -22,11 +22,10 @@ amqp.connect(rabbitmq_url, opts, function(err, conn) {
         console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
         ch.consume(q, function(msg) {
 			data = JSON.parse(msg.content);
-			body = JSON.stringify(data.comment);
 			request({
 				url: data.url.url,
 				method: "post",
-				json: body
+				json: data.comment
 			}, function (error, response, body) {
 				if(!error) {
 					console.log(" [x] Complete: %s", msg.content.toString());
