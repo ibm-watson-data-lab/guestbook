@@ -1,0 +1,5 @@
+{
+    "require": {
+        "ibm-watson-data-lab/php-couchdb": "^0.1.0"
+    }
+}
